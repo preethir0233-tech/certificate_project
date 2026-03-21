@@ -68,6 +68,8 @@
 
 <div class="certificate-container">
 
+  <img src="{{ url_for('static', filename='logo.png') }}" width="120">
+  
   <h1>🏆 Certificate of Completion</h1>
 
   <p>This is proudly presented to</p>
@@ -80,11 +82,15 @@
 
   <p>Demonstrating dedication and strong understanding of web development concepts.</p>
 
+  <img src="{{ url_for('static', filename='stamp.png') }}" width="120">
+  
   <div class="footer">
     <p>📅 Date: {{ date }}</p>
     <p>🎓 Study Hub Platform</p>
   </div>
 
+  <img src="{{ url_for('static', filename='qr.png') }}" width="120">
+  
   <br><br>
 
 <form action="/download_certificate" method="get">
