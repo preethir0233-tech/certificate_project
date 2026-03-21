@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Result</title>
+</head>
+<body>
+
+<h1>Your Score: {{ score }}/2</h1>
+
+{% if score == 2 %}
+  <h2>🎉 Certificate Earned!</h2>
+{% else %}
+  <h2>Try Again</h2>
+{% endif %}
+
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+</html>
