@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exam</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body onload="startTimer()">
+
+<h2>📝 Online Test</h2>
+
+<p id="timer">Time: 30s</p>
+
+<form method="POST" action="/result">
+
+<h3>1. Which is used for structure?</h3>
+<input type="radio" name="q1" value="HTML"> HTML<br>
+<input type="radio" name="q1" value="CSS"> CSS<br>
+<input type="radio" name="q1" value="JS"> JavaScript<br><br>
+
+<h3>2. Which is used for styling?</h3>
+<input type="radio" name="q2" value="HTML"> HTML<br>
+<input type="radio" name="q2" value="CSS"> CSS<br>
+<input type="radio" name="q2" value="JS"> JavaScript<br><br>
+
+<button type="submit">Submit</button>
+
+</form>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
