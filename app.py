@@ -88,7 +88,7 @@ def download_certificate():
     conn.close()
 
     # QR CODE
-    verify_url = f"http://10.86.84.224:5000/verify/{cert_id}"
+    verify_url = f"https://certificate-project-gv50.onrender.com"+ cert_id
     qr = qrcode.make(verify_url)
     qr.save("static/qr.png")
 
@@ -210,4 +210,4 @@ def add_border(canvas, doc):
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",debug=True)
+    app.run(host="0.0.0.0", port=10000)
