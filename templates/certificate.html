@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Certificate</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f4f7ff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .certificate-container {
+      width: 800px;
+      margin: 50px auto;
+      padding: 40px;
+      background: white;
+      border: 10px solid #1e3a8a;
+      text-align: center;
+      box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      font-size: 40px;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin: 20px 0;
+      color: #111;
+    }
+
+    p {
+      font-size: 18px;
+      color: #444;
+    }
+
+    .name {
+      font-size: 32px;
+      font-weight: bold;
+      color: #1e3a8a;
+      margin: 20px 0;
+      border-bottom: 2px solid #1e3a8a;
+      display: inline-block;
+      padding: 5px 20px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 16px;
+    }
+
+    .btn {
+      margin-top: 30px;
+      display: inline-block;
+      padding: 10px 20px;
+      background: #1e3a8a;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="certificate-container">
+
+  <h1>🏆 Certificate of Completion</h1>
+
+  <p>This is proudly presented to</p>
+
+  <div class="name">{{ user }}</div>
+
+  <p>for successfully completing the</p>
+
+  <h2>HTML Course</h2>
+
+  <p>Demonstrating dedication and strong understanding of web development concepts.</p>
+
+  <div class="footer">
+    <p>📅 Date: {{ date }}</p>
+    <p>🎓 Study Hub Platform</p>
+  </div>
+
+  <br><br>
+
+<form action="/download_certificate" method="get">
+  <button type="submit">⬇ Download Certificate</button>
+</form>
+
+  <a href="/dashboard" class="btn">Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>
