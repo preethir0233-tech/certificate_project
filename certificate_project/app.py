@@ -3,6 +3,7 @@ import sqlite3
 from datetime import date
 import random
 import qrcode
+import os
 
 app = Flask(__name__)
 app.secret_key = "studyhub123"
@@ -88,9 +89,11 @@ def download_certificate():
     conn.close()
 
     # QR CODE
-    verify_url = f"https://certificate-project-gv50.onrender.com"+ cert_id
+    BASE_URL = "https://certificate-project-1.onrender.com"
+    verify_url = f"{BASE_URL}/verify/{cert_id}"
     qr = qrcode.make(verify_url)
-    qr.save("static/qr.png")
+    qr_path = f"static/{cert_id}.png
+    qr.save("qr_path")
 
     file_name = f"{cert_id}.pdf"
     doc = SimpleDocTemplate(file_name, pagesize=A4)
@@ -210,4 +213,5 @@ def add_border(canvas, doc):
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    port = int(os.environ.get("PORT",10000))
+    app.run(host="0.0.0.0", port = port)
