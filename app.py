@@ -3,9 +3,23 @@ import sqlite3
 from datetime import date
 import random
 import qrcode
+import os
+
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import inch
 
 app = Flask(__name__)
 app.secret_key = "studyhub123"
+
+# ---------------- FOLDERS ----------------
+os.makedirs("certificates", exist_ok=True)
+os.makedirs("static", exist_ok=True)
+
+# ---------------- BASE URL ----------------
+BASE_URL = "https://certificate-project-gv50.onrender.com"
 
 # ---------------- DATABASE INIT ----------------
 def init_cert_db():
@@ -68,12 +82,6 @@ def result():
 # ---------------- DOWNLOAD CERTIFICATE ----------------
 @app.route('/download_certificate')
 def download_certificate():
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
-    from reportlab.platypus import Table, TableStyle
-    from reportlab.lib.styles import ParagraphStyle
-    from reportlab.lib import colors
-    from reportlab.lib.pagesizes import A4
-    from reportlab.lib.units import inch
 
     user = session.get('user', 'Student')
 
@@ -87,22 +95,25 @@ def download_certificate():
     conn.commit()
     conn.close()
 
-    # QR CODE
-    verify_url = f"https://certificate-project-gv50.onrender.com"+ cert_id
+    # ---------------- QR CODE ----------------
+    verify_url = f"{BASE_URL}/verify/{cert_id}"
     qr = qrcode.make(verify_url)
-    qr.save("static/qr.png")
 
-    file_name = f"{cert_id}.pdf"
+    qr_path = f"static/qr_{cert_id}.png"
+    qr.save(qr_path)
+
+    # ---------------- PDF FILE ----------------
+    file_name = f"certificates/{cert_id}.pdf"
     doc = SimpleDocTemplate(file_name, pagesize=A4)
 
-    # STYLES
+    # ---------------- STYLES ----------------
     title = ParagraphStyle(name='t', fontSize=28, alignment=1, textColor=colors.darkblue)
     name_style = ParagraphStyle(name='n', fontSize=24, alignment=1, textColor=colors.darkred)
     normal = ParagraphStyle(name='no', fontSize=14, alignment=1)
 
     content = []
 
-    # ---------------- LOGO ----------------
+    # LOGO (optional)
     try:
         logo = Image("static/logo.png", width=1.6*inch, height=1.6*inch)
         logo.hAlign = 'CENTER'
@@ -131,10 +142,10 @@ def download_certificate():
     content.append(Paragraph(f"🆔 Certificate ID: {cert_id}", normal))
     content.append(Spacer(1, 30))
 
-    # SIGNATURE TABLE
+    # SIGNATURE
     signature = Table([
         ["Instructor", "", "Authorized By"],
-        ["(Study Hub Mentor)", "", "Study Hub"]
+        ["Study Hub Mentor", "", "Study Hub"]
     ], colWidths=[2.5*inch, 1*inch, 2.5*inch])
 
     signature.setStyle(TableStyle([
@@ -147,7 +158,7 @@ def download_certificate():
     content.append(Spacer(1, 20))
 
     # QR CODE
-    content.append(Image("static/qr.png", width=1.2*inch, height=1.2*inch))
+    content.append(Image(qr_path, width=1.2*inch, height=1.2*inch))
 
     doc.build(content, onFirstPage=add_border)
 
@@ -156,6 +167,7 @@ def download_certificate():
 # ---------------- VERIFY CERTIFICATE ----------------
 @app.route('/verify/<cert_id>')
 def verify(cert_id):
+
     conn = sqlite3.connect('certificates.db')
     cursor = conn.cursor()
 
@@ -176,16 +188,12 @@ def verify(cert_id):
 
 # ---------------- BORDER DESIGN ----------------
 def add_border(canvas, doc):
-    from reportlab.lib import colors
-    from reportlab.lib.pagesizes import A4
 
     width, height = A4
 
-    # BACKGROUND
     canvas.setFillColorRGB(0.95, 0.97, 1)
     canvas.rect(0, 0, width, height, fill=1)
 
-    # WATERMARK
     canvas.saveState()
     canvas.setFont("Helvetica-Bold", 60)
     canvas.setFillColorRGB(0.8, 0.85, 0.95)
@@ -194,7 +202,6 @@ def add_border(canvas, doc):
     canvas.drawCentredString(0, 0, "STUDY HUB")
     canvas.restoreState()
 
-    # BORDER
     canvas.setStrokeColor(colors.darkblue)
     canvas.setLineWidth(4)
     canvas.rect(30, 30, width-60, height-60)
@@ -202,7 +209,6 @@ def add_border(canvas, doc):
     canvas.setLineWidth(2)
     canvas.rect(40, 40, width-80, height-80)
 
-    # STAMP
     try:
         canvas.drawImage("static/stamp.png", width-180, 80, width=100, height=100, mask='auto')
     except:

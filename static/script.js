@@ -13,8 +13,5 @@ function startTimer() {
             document.querySelector("form").submit();
         }
     }, 1000);
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> 0dd5a8556395b2e3430105979f5af4582bf57e4e
