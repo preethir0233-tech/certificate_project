@@ -89,11 +89,11 @@ def download_certificate():
     conn.close()
 
     # QR CODE
-    BASE_URL = "https://certificate-project-1.onrender.com"
+    BASE_URL = "https://certificate-project-2.onrender.com"
     verify_url = f"{BASE_URL}/verify/{cert_id}"
     qr = qrcode.make(verify_url)
-    qr_path = f"static/{cert_id}.png
-    qr.save("qr_path")
+    qr_path = f"static/{cert_id}.png"
+    qr.save(qr_path)
 
     file_name = f"{cert_id}.pdf"
     doc = SimpleDocTemplate(file_name, pagesize=A4)
@@ -150,8 +150,8 @@ def download_certificate():
     content.append(Spacer(1, 20))
 
     # QR CODE
-    content.append(Image("static/qr.png", width=1.2*inch, height=1.2*inch))
-
+    content.append(Image(qr_path, width=1.2*inch, height=1.2*inch))
+    
     doc.build(content, onFirstPage=add_border)
 
     return send_file(file_name, as_attachment=True)
